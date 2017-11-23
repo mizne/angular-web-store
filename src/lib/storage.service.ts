@@ -114,7 +114,7 @@ export class StorageService {
   }
 
   private initConfig(config: StorageConfig): void {
-    this.prefix = config.prefix || 'MIZNE__'
+    this.prefix = config.prefix || 'MIZNE'
     this.expiredMs = config.expiredIn ? ms(config.expiredIn) : -1
     this.actionNotify = config.actionNotify || {}
   }
