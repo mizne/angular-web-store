@@ -16,8 +16,8 @@ import {
 
 import {
   AngularWebStoreError,
-  SESSION_STORAGE_NOTSUPPORTED,
-  LOCAL_STORAGE_NOTSUPPORTED,
+  SESSION_STORAGE_NOT_SUPPORTED,
+  LOCAL_STORAGE_NOT_SUPPORTED,
   UNKNOWN_STORAGE_TYPE
 } from './storage.errors'
 
@@ -25,6 +25,9 @@ export enum StorageType {
   LOCAL = 'localStorage',
   SESSION = 'sessionStorage'
 }
+
+const EXPIRED_AT = '@@EXPIRED_AT'
+const STOREAGE_VALUE = '@@STORAGE_VALUE'
 
 export class StorageService {
   private storage: Storage
@@ -49,8 +52,8 @@ export class StorageService {
     this.storage.setItem(
       this.computeKey(key),
       JSON.stringify({
-        _expiredAt: expiredMs === -1 ? -1 : +new Date() + expiredMs,
-        _value: value
+        [EXPIRED_AT]: expiredMs === -1 ? -1 : +new Date() + expiredMs,
+        [STOREAGE_VALUE]: value
       })
     )
   }
@@ -66,10 +69,10 @@ export class StorageService {
  get(key: string): any {
     this.notifyAction(GetAction.TYPE, new GetAction(key))
     try {
-      const value = JSON.parse(this.storage.getItem(this.computeKey(key)) || 'null')
-      if (this.isValidValue(value)) {
-        if (this.unExpired(value._expiredAt)) {
-          return value._value
+      const obj = JSON.parse(this.storage.getItem(this.computeKey(key)) || 'null')
+      if (this.isValidValue(obj)) {
+        if (this.unExpired(obj[EXPIRED_AT])) {
+          return obj[STOREAGE_VALUE]
         } else {
           this.storage.removeItem(this.computeKey(key))
           return null
@@ -81,11 +84,11 @@ export class StorageService {
     }
   }
 
-  private isValidValue(value: any): boolean {
+  private isValidValue(obj: any): boolean {
     return (
-      typeof value === 'object' &&
-      value !== null &&
-      typeof value._expiredAt === 'number'
+      typeof obj === 'object' &&
+      obj !== null &&
+      typeof obj[EXPIRED_AT] === 'number'
     )
   }
 
@@ -125,14 +128,14 @@ export class StorageService {
         if (this.checkSupport(storageType)) {
           this.storage = window[storageType]
         } else {
-          this.errors.next(LOCAL_STORAGE_NOTSUPPORTED)
+          this.errors.next(LOCAL_STORAGE_NOT_SUPPORTED)
         }
         break
-      case StorageType.LOCAL:
+      case StorageType.SESSION:
         if (this.checkSupport(storageType)) {
           this.storage = window[storageType]
         } else {
-          this.errors.next(SESSION_STORAGE_NOTSUPPORTED)
+          this.errors.next(SESSION_STORAGE_NOT_SUPPORTED)
         }
         break
       default:
@@ -145,7 +148,7 @@ export class StorageService {
     try {
       if (storageType in window && window[storageType] !== null) {
         const webStorage = window[storageType]
-        const key = `${this.prefix}__CHECK_SUPPORT`
+        const key = `${this.prefix}_CHECK_SUPPORT`
         webStorage.setItem(key, '')
         webStorage.removeItem(key)
         return true
