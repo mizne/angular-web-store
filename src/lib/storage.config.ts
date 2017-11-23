@@ -45,12 +45,12 @@ export class ClearAction extends Action {
   }
 }
 
-export interface StorageConfig {
+export interface AngularWebStoreConfig {
   prefix?: string
   expiredIn?: string
   actionNotify?: ActionNotifyOptions
 }
 
-export const STORAGE_CONFIG = new InjectionToken('STORAGE_CONFIG')
+export const ANGULAR_WEB_STORE_CONFIG = new InjectionToken('ANGULAR_WEB_STORE_CONFIG')
 
 export type Actions = SetAction | GetAction | RemoveAction | ClearAction

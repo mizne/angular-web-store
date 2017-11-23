@@ -8,15 +8,9 @@ To install this library, run:
 $ npm install angular-web-store --save
 ```
 
-## Consuming your library
+## Quick Start
 
-Once you have published your library to npm, you can import your library in any Angular application by running:
-
-```bash
-$ npm install angular-web-store
-```
-
-and then from your Angular `AppModule`:
+Import the `AngularWebStoreModule` in your module.
 
 ```typescript
 import { BrowserModule } from '@angular/platform-browser';
@@ -25,7 +19,7 @@ import { NgModule } from '@angular/core';
 import { AppComponent } from './app.component';
 
 // Import your library
-import { SampleModule } from 'angular-web-store';
+import { AngularWebStoreModule } from 'angular-web-store';
 
 @NgModule({
   declarations: [
@@ -33,9 +27,7 @@ import { SampleModule } from 'angular-web-store';
   ],
   imports: [
     BrowserModule,
-
-    // Specify your library as an import
-    LibraryModule
+    AngularWebStoreModule.forRoot()
   ],
   providers: [],
   bootstrap: [AppComponent]
@@ -43,29 +35,45 @@ import { SampleModule } from 'angular-web-store';
 export class AppModule { }
 ```
 
-Once your library is imported, you can use its components, directives and pipes in your Angular application:
+## Usage
 
-```xml
-<!-- You can now use your library component in app.component.html -->
-<h1>
-  {{title}}
-</h1>
-<sampleComponent></sampleComponent>
-```
+### Using `LocalStorageService` or `SessionStorageService` service.
 
-## Development
+```typescript
+import { Component } from '@angular/core'
+import { LocalStorageService, SessionStorageService } from 'angular-web-store'
 
-To generate all `*.js`, `*.d.ts` and `*.metadata.json` files:
+@Component({
+    selector: 'demo',
+    templateUrl: './demo.component.html'
+})
+export class DemoComponent {
 
-```bash
-$ npm run build
-```
+    constructor(
+      private local: LocalStorageService, 
+      private session: SessionStorageService
+    ) { }
 
-To lint all `*.ts` files:
+    KEY = 'value';
+    value: any = null;
 
-```bash
-$ npm run lint
-```
+    set() {
+        this.local.set(this.KEY, { a: 1, now: +new Date }, '4s')
+    }
+
+    remove() {
+        this.local.remove(this.KEY)
+    }
+
+    get() {
+        this.value = this.local.get(this.KEY)
+    }
+
+    clear() {
+        this.local.clear()
+    }
+}
+
 
 ## License
 

@@ -4,8 +4,8 @@ import { Observable } from 'rxjs/Observable'
 import { Subject } from 'rxjs/Subject'
 
 import {
-  STORAGE_CONFIG,
-  StorageConfig,
+  ANGULAR_WEB_STORE_CONFIG,
+  AngularWebStoreConfig,
   ActionNotifyOptions,
   Actions,
   SetAction,
@@ -15,7 +15,7 @@ import {
 } from './storage.config'
 
 import {
-  StorageServiceError,
+  AngularWebStoreError,
   SESSION_STORAGE_NOTSUPPORTED,
   LOCAL_STORAGE_NOTSUPPORTED,
   UNKNOWN_STORAGE_TYPE
@@ -32,12 +32,12 @@ export class StorageService {
   private expiredMs: number
   private actionNotify: ActionNotifyOptions
 
-  public errors: Subject<StorageServiceError> = new Subject<
-    StorageServiceError
+  public errors: Subject<AngularWebStoreError> = new Subject<
+    AngularWebStoreError
   >()
   public actions: Subject<Actions> = new Subject<Actions>()
 
-  constructor(private storageType: StorageType, private config: StorageConfig) {
+  constructor(private storageType: StorageType, private config: AngularWebStoreConfig) {
     this.initConfig(config)
     this.initStorage(storageType)
   }
@@ -113,7 +113,7 @@ export class StorageService {
     }
   }
 
-  private initConfig(config: StorageConfig): void {
+  private initConfig(config: AngularWebStoreConfig): void {
     this.prefix = config.prefix || 'MIZNE'
     this.expiredMs = config.expiredIn ? ms(config.expiredIn) : -1
     this.actionNotify = config.actionNotify || {}
@@ -159,14 +159,14 @@ export class StorageService {
 
 @Injectable()
 export class LocalStorageService extends StorageService {
-  constructor(@Inject(STORAGE_CONFIG) config: StorageConfig) {
+  constructor(@Inject(ANGULAR_WEB_STORE_CONFIG) config: AngularWebStoreConfig) {
     super(StorageType.LOCAL, config)
   }
 }
 
 @Injectable()
 export class SessionStorageService extends StorageService {
-  constructor(@Inject(STORAGE_CONFIG) config: StorageConfig) {
+  constructor(@Inject(ANGULAR_WEB_STORE_CONFIG) config: AngularWebStoreConfig) {
     super(StorageType.SESSION, config)
   }
 }

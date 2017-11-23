@@ -10,7 +10,10 @@
     "email": "w20054319@126.com"
   },
   "keywords": [
-    "angular"
+    "angular-web-storage",
+    "ng2-storage",
+    "angular localstorage",
+    "angular sessionstorage"
   ],
   "license": "MIT",
   "bugs": {

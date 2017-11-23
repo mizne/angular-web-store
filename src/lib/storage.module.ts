@@ -1,23 +1,23 @@
 import { NgModule, ModuleWithProviders } from '@angular/core'
 
 import { LocalStorageService, SessionStorageService } from './storage.service'
-import { StorageConfig, STORAGE_CONFIG } from './storage.config'
+import { AngularWebStoreConfig, ANGULAR_WEB_STORE_CONFIG } from './storage.config'
 
 export {
   LocalStorageService,
   SessionStorageService,
-  StorageConfig,
-  STORAGE_CONFIG
+  AngularWebStoreConfig,
+  ANGULAR_WEB_STORE_CONFIG
 }
 
 @NgModule({
   providers: [LocalStorageService, SessionStorageService]
 })
-export class StorageModule {
-  static forRoot(config: StorageConfig = {}): ModuleWithProviders {
+export class AngularWebStoreModule {
+  static forRoot(config: AngularWebStoreConfig = {}): ModuleWithProviders {
     return {
-      ngModule: StorageModule,
-      providers: [{ provide: STORAGE_CONFIG, useValue: config }]
+      ngModule: AngularWebStoreModule,
+      providers: [{ provide: ANGULAR_WEB_STORE_CONFIG, useValue: config }]
     }
   }
 }
