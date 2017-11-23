@@ -9,6 +9,6 @@ import { Injectable, PipeTransform, Pipe } from '@angular/core';
 @Injectable()
 export class SamplePipe implements PipeTransform {
   transform(value: any, args: any[] = null): string {
-    return value;
+    return value + ' Hello angular library generator!!!!';
   }
 }
