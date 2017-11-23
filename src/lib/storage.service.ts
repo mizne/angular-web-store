@@ -1,5 +1,5 @@
 import { Injectable, Inject } from '@angular/core'
-import * as ms from 'ms'
+import { ms } from './ms'
 import { Observable } from 'rxjs/Observable'
 import { Subject } from 'rxjs/Subject'
 
@@ -43,7 +43,7 @@ export class StorageService {
   }
 
   set(key: string, value: any, expiredIn?: string): void {
-    this.notifyAction('set', new SetAction(key, value, expiredIn))
+    this.notifyAction(SetAction.TYPE, new SetAction(key, value, expiredIn))
 
     const expiredMs = this.computeExpiredMs(expiredIn)
     this.storage.setItem(
@@ -55,7 +55,7 @@ export class StorageService {
     )
   }
 
-  private computeExpiredMs(expiredIn: string | undefined): number {
+  private computeExpiredMs(expiredIn: string): number {
     return expiredIn ? ms(expiredIn) : this.expiredMs
   }
 
@@ -64,7 +64,7 @@ export class StorageService {
   }
 
  get(key: string): any {
-    this.notifyAction('get', new GetAction(key))
+    this.notifyAction(GetAction.TYPE, new GetAction(key))
     try {
       const value = JSON.parse(this.storage.getItem(this.computeKey(key)) || 'null')
       if (this.isValidValue(value)) {
@@ -94,12 +94,12 @@ export class StorageService {
   }
 
   remove(key: string): void {
-    this.notifyAction('remove', new RemoveAction(key))
+    this.notifyAction(RemoveAction.TYPE, new RemoveAction(key))
     this.storage.removeItem(this.computeKey(key))
   }
 
   clear() {
-    this.notifyAction('clear', new ClearAction())
+    this.notifyAction(ClearAction.TYPE, new ClearAction())
     this.storage.clear()
   }
 

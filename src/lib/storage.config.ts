@@ -7,29 +7,24 @@ export interface ActionNotifyOptions {
   clear?: boolean
 }
 
-export class Action {
-  constructor() {
-  }
-}
-
-export class SetAction extends Action {
+export class SetAction {
+  static TYPE = 'set'
   constructor(public key: string, public value: any, public expiredIn: string) {
-    super()
   }
 }
-export class GetAction extends Action {
+export class GetAction {
+  static TYPE = 'get'
   constructor(public key: string) {
-    super()
   }
 }
-export class RemoveAction extends Action {
+export class RemoveAction {
+  static TYPE = 'remove'
   constructor(public key: string) {
-    super()
   }
 }
-export class ClearAction extends Action {
+export class ClearAction {
+  static TYPE = 'clear'
   constructor() {
-    super()
   }
 }
 
