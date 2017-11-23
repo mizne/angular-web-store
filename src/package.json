@@ -1,0 +1,28 @@
+{
+  "name": "angular-web-store",
+  "version": "0.1.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mizne/angular-web-store"
+  },
+  "author": {
+    "name": "mizne",
+    "email": "w20054319@126.com"
+  },
+  "keywords": [
+    "angular"
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mizne/angular-web-store/issues"
+  },
+  "main": "angular-web-store.umd.js",
+  "module": "angular-web-store.js",
+  "jsnext:main": "angular-web-store.js",
+  "typings": "angular-web-store.d.ts",
+  "peerDependencies": {
+    "@angular/core": "^4.0.0",
+    "rxjs": "^5.1.0",
+    "zone.js": "^0.8.4"
+  }
+}
