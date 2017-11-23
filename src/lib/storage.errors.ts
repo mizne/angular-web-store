@@ -1,5 +1,3 @@
-import * as ua from 'ua-discover'
-
 export interface AngularWebStoreError {
   code: number
   message: string
@@ -17,5 +15,3 @@ export const UNKNOWN_STORAGE_TYPE: AngularWebStoreError = {
   code: 300,
   message: 'Unknown storage type!'
 }
-
-console.log(ua)

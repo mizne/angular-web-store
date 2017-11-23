@@ -1,6 +1,6 @@
 {
   "name": "angular-web-store",
-  "version": "0.1.18",
+  "version": "0.1.19",
   "repository": {
     "type": "git",
     "url": "https://github.com/mizne/angular-web-store"
@@ -27,8 +27,5 @@
     "@angular/core": "^4.0.0",
     "rxjs": "^5.1.0",
     "zone.js": "^0.8.4"
-  },
-  "dependencies": {
-    "ua-discover": "^0.0.1"
   }
 }
