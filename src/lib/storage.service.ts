@@ -49,14 +49,22 @@ export class StorageService {
   //   errors$: thisArg => thisArg.errors
   // })
   set(key: string, value: any, expiredIn?: string): void {
-    const expiredMs = expiredIn ? ms(expiredIn) : this.expiredMs
+    const expiredMs = this.computeExpiredMs(expiredIn)
     this.storage.setItem(
-      key,
+      this.computeKey(key),
       JSON.stringify({
         _expiredAt: expiredMs === -1 ? -1 : +new Date() + expiredMs,
         _value: value
       })
     )
+  }
+
+  private computeExpiredMs(expiredIn: string | undefined): number {
+    return expiredIn ? ms(expiredIn) : this.expiredMs
+  }
+
+  private computeKey(originalKey: string): string {
+    return `${this.prefix}__originalKey`
   }
 
   // @ActionNotify({
@@ -67,12 +75,12 @@ export class StorageService {
   // })
   get(key: string): any {
     try {
-      const value = JSON.parse(this.storage.getItem(key) || 'null')
+      const value = JSON.parse(this.storage.getItem(this.computeKey(key)) || 'null')
       if (this.isValidValue(value)) {
         if (this.unExpired(value._expiredAt)) {
           return value._value
         } else {
-          this.storage.removeItem(key)
+          this.storage.removeItem(this.computeKey(key))
           return null
         }
       }
@@ -101,7 +109,7 @@ export class StorageService {
   //   errors$: thisArg => thisArg.errors
   // })
   remove(key: string): void {
-    this.storage.removeItem(key)
+    this.storage.removeItem(this.computeKey(key))
   }
 
   // @ActionNotify({
