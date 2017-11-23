@@ -21,7 +21,7 @@ import {
   UNKNOWN_STORAGE_TYPE
 } from './storage.errors'
 
-export enum StorageType {
+enum StorageType {
   LOCAL = 'localStorage',
   SESSION = 'sessionStorage'
 }
@@ -29,7 +29,7 @@ export enum StorageType {
 const EXPIRED_AT = '@@EXPIRED_AT'
 const STOREAGE_VALUE = '@@STORAGE_VALUE'
 
-export class StorageService {
+class StorageService {
   private storage: Storage
   private prefix: string
   private expiredMs: number
