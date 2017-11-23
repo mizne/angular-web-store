@@ -42,13 +42,9 @@ export class StorageService {
     this.initStorage(storageType)
   }
 
-  // @ActionNotify({
-  //   enable: thisArg => thisArg.actionNotify.set,
-  //   actionArgs: (key, value, expiredIn) => new SetAction(key, value, expiredIn),
-  //   actions$: thisArg => thisArg.actions,
-  //   errors$: thisArg => thisArg.errors
-  // })
   set(key: string, value: any, expiredIn?: string): void {
+    this.notifyAction('set', new SetAction(key, value, expiredIn))
+
     const expiredMs = this.computeExpiredMs(expiredIn)
     this.storage.setItem(
       this.computeKey(key),
@@ -64,16 +60,11 @@ export class StorageService {
   }
 
   private computeKey(originalKey: string): string {
-    return `${this.prefix}__originalKey`
+    return `${this.prefix}__${originalKey}`
   }
 
-  // @ActionNotify({
-  //   enable: thisArg => thisArg.actionNotify.get,
-  //   actionArgs: key => new GetAction(key),
-  //   actions$: thisArg => thisArg.actions,
-  //   errors$: thisArg => thisArg.errors
-  // })
-  get(key: string): any {
+ get(key: string): any {
+    this.notifyAction('get', new GetAction(key))
     try {
       const value = JSON.parse(this.storage.getItem(this.computeKey(key)) || 'null')
       if (this.isValidValue(value)) {
@@ -102,24 +93,24 @@ export class StorageService {
     return mills === -1 || mills >= +new Date()
   }
 
-  // @ActionNotify({
-  //   enable: thisArg => thisArg.actionNotify.remove,
-  //   actionArgs: key => new RemoveAction(key),
-  //   actions$: thisArg => thisArg.actions,
-  //   errors$: thisArg => thisArg.errors
-  // })
   remove(key: string): void {
+    this.notifyAction('remove', new RemoveAction(key))
     this.storage.removeItem(this.computeKey(key))
   }
 
-  // @ActionNotify({
-  //   enable: thisArg => thisArg.actionNotify.clear,
-  //   actionArgs: () => new ClearAction(),
-  //   actions$: thisArg => thisArg.actions,
-  //   errors$: thisArg => thisArg.errors
-  // })
   clear() {
+    this.notifyAction('clear', new ClearAction())
     this.storage.clear()
+  }
+
+  private notifyAction(action: string, actionArgs: Actions) {
+    if (this.actionNotify[action]) {
+      try {
+        this.actions.next(actionArgs)
+      } catch (e) {
+        this.errors.next({ code: 500, message: e.message })
+      }
+    }
   }
 
   private initConfig(config: StorageConfig): void {
@@ -177,28 +168,5 @@ export class LocalStorageService extends StorageService {
 export class SessionStorageService extends StorageService {
   constructor(@Inject(STORAGE_CONFIG) config: StorageConfig) {
     super(StorageType.SESSION, config)
-  }
-}
-
-function ActionNotify(options: {
-  enable: (thisArg: any) => boolean
-  actionArgs: (...args: any[]) => Actions
-  actions$: (thisArg: any) => Subject<Actions>
-  errors$: (thisArg: any) => Subject<StorageServiceError>
-}) {
-  return function(target: any, name: string, descriptor: any) {
-    const originalFn = descriptor.value
-
-    descriptor.value = function(...args: any[]) {
-      if (options.enable(this)) {
-        try {
-          options.actions$(this).next(options.actionArgs(...args))
-        } catch (e) {
-          options.errors$(this).next({ code: 500, message: e.message })
-        }
-      }
-
-      return originalFn.apply(this, args)
-    }
   }
 }
