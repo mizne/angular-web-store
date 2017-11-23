@@ -73,7 +73,5 @@
   "engines": {
     "node": ">=6.0.0"
   },
-  "dependencies": {
-    "ua-discover": "^0.0.1"
-  }
+  "dependencies": {}
 }

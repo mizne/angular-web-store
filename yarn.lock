@@ -4814,10 +4814,6 @@ typescript@~2.4.2:
   version "2.4.2"
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-2.4.2.tgz#f8395f85d459276067c988aa41837a8f82870844"
 
-ua-discover@^0.0.1:
-  version "0.0.1"
-  resolved "https://registry.yarnpkg.com/ua-discover/-/ua-discover-0.0.1.tgz#a94efd521d2d3273f7db207e4f126285090c4167"
-
 ua-parser-js@0.7.12:
   version "0.7.12"
   resolved "https://registry.yarnpkg.com/ua-parser-js/-/ua-parser-js-0.7.12.tgz#04c81a99bdd5dc52263ea29d24c6bf8d4818a4bb"
