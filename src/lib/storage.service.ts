@@ -40,11 +40,21 @@ class StorageService {
   >()
   public actions: Subject<Actions> = new Subject<Actions>()
 
-  constructor(private storageType: StorageType, private config: AngularWebStoreConfig) {
+  constructor(
+    private storageType: StorageType,
+    private config: AngularWebStoreConfig
+  ) {
     this.initConfig(config)
     this.initStorage(storageType)
   }
-
+  /**
+   * set key,value to storage
+   *
+   * @param {string} key
+   * @param {*} value
+   * @param {string} [expiredIn] ex: '3ms' '4s' '5m' '6h' '7d' '8y'
+   * @memberof StorageService
+   */
   set(key: string, value: any, expiredIn?: string): void {
     this.notifyAction(SetAction.TYPE, new SetAction(key, value, expiredIn))
 
@@ -57,19 +67,19 @@ class StorageService {
       })
     )
   }
-
-  private computeExpiredMs(expiredIn: string): number {
-    return expiredIn ? ms(expiredIn) : this.expiredMs
-  }
-
-  private computeKey(originalKey: string): string {
-    return `${this.prefix}__${originalKey}`
-  }
-
- get(key: string): any {
+  /**
+   * get value from storage of key
+   *
+   * @param {string} key
+   * @returns {*}
+   * @memberof StorageService
+   */
+  get(key: string): any {
     this.notifyAction(GetAction.TYPE, new GetAction(key))
     try {
-      const obj = JSON.parse(this.storage.getItem(this.computeKey(key)) || 'null')
+      const obj = JSON.parse(
+        this.storage.getItem(this.computeKey(key)) || 'null'
+      )
       if (this.isValidValue(obj)) {
         if (this.unExpired(obj[EXPIRED_AT])) {
           return obj[STOREAGE_VALUE]
@@ -83,37 +93,24 @@ class StorageService {
       return null
     }
   }
-
-  private isValidValue(obj: any): boolean {
-    return (
-      typeof obj === 'object' &&
-      obj !== null &&
-      typeof obj[EXPIRED_AT] === 'number'
-    )
-  }
-
-  private unExpired(mills: number): boolean {
-    return mills === -1 || mills >= +new Date()
-  }
-
+  /**
+   * remove value from storage of key
+   *
+   * @param {string} key
+   * @memberof StorageService
+   */
   remove(key: string): void {
     this.notifyAction(RemoveAction.TYPE, new RemoveAction(key))
     this.storage.removeItem(this.computeKey(key))
   }
-
+  /**
+   * clear all storage
+   *
+   * @memberof StorageService
+   */
   clear(): void {
     this.notifyAction(ClearAction.TYPE, new ClearAction())
     this.storage.clear()
-  }
-
-  private notifyAction(action: string, actionArgs: Actions): void {
-    if (this.actionNotify[action]) {
-      try {
-        this.actions.next(actionArgs)
-      } catch (e) {
-        this.errors.next({ code: 500, message: e.message })
-      }
-    }
   }
 
   private initConfig(config: AngularWebStoreConfig): void {
@@ -157,6 +154,36 @@ class StorageService {
       this.errors.next({ code: 500, message: e.message })
     }
     return false
+  }
+
+  private computeExpiredMs(expiredIn: string): number {
+    return expiredIn ? ms(expiredIn) : this.expiredMs
+  }
+
+  private computeKey(originalKey: string): string {
+    return `${this.prefix}__${originalKey}`
+  }
+
+  private isValidValue(obj: any): boolean {
+    return (
+      typeof obj === 'object' &&
+      obj !== null &&
+      typeof obj[EXPIRED_AT] === 'number'
+    )
+  }
+
+  private unExpired(mills: number): boolean {
+    return mills === -1 || mills >= +new Date()
+  }
+
+  private notifyAction(action: string, actionArgs: Actions): void {
+    if (this.actionNotify[action]) {
+      try {
+        this.actions.next(actionArgs)
+      } catch (e) {
+        this.errors.next({ code: 500, message: e.message })
+      }
+    }
   }
 }
 
