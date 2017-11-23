@@ -1,4 +1,4 @@
-export * from './lib/storage.config';
-export * from './lib/storage.errors';
-export * from './lib/storage.module';
-export * from './lib/storage.service';
+import { AngularWebStoreModule } from './lib/storage.module'
+import { LocalStorageService, SessionStorageService } from './lib/storage.service'
+
+export { AngularWebStoreModule, LocalStorageService, SessionStorageService }

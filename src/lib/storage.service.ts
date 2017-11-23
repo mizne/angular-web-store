@@ -101,12 +101,12 @@ export class StorageService {
     this.storage.removeItem(this.computeKey(key))
   }
 
-  clear() {
+  clear(): void {
     this.notifyAction(ClearAction.TYPE, new ClearAction())
     this.storage.clear()
   }
 
-  private notifyAction(action: string, actionArgs: Actions) {
+  private notifyAction(action: string, actionArgs: Actions): void {
     if (this.actionNotify[action]) {
       try {
         this.actions.next(actionArgs)

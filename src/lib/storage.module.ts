@@ -3,13 +3,6 @@ import { NgModule, ModuleWithProviders } from '@angular/core'
 import { LocalStorageService, SessionStorageService } from './storage.service'
 import { AngularWebStoreConfig, ANGULAR_WEB_STORE_CONFIG } from './storage.config'
 
-export {
-  LocalStorageService,
-  SessionStorageService,
-  AngularWebStoreConfig,
-  ANGULAR_WEB_STORE_CONFIG
-}
-
 @NgModule({
   providers: [LocalStorageService, SessionStorageService]
 })
