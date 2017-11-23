@@ -21,7 +21,7 @@ import {
   UNKNOWN_STORAGE_TYPE
 } from './storage.errors'
 
-enum StorageType {
+export enum StorageType {
   LOCAL = 'localStorage',
   SESSION = 'sessionStorage'
 }
