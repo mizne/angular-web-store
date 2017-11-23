@@ -29,7 +29,7 @@ enum StorageType {
 const EXPIRED_AT = '@@EXPIRED_AT'
 const STOREAGE_VALUE = '@@STORAGE_VALUE'
 
-class StorageService {
+export class StorageService {
   private storage: Storage
   private prefix: string
   private expiredMs: number
