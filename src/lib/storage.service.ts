@@ -86,7 +86,7 @@ export class StorageService {
       if (this.isValidValue(obj)) {
         if (this.unExpired(obj[EXPIRED_AT])) {
           const value = obj[STOREAGE_VALUE]
-          if (this.keepAlive) {
+          if (obj[EXPIRED_AT] !== -1 && this.keepAlive) {
             this.set(key, value, String(obj[EXPIRED_MS]) + 'ms')
           }
           return value
