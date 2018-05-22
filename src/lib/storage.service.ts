@@ -28,11 +28,13 @@ export enum StorageType {
 
 const EXPIRED_AT = '@@EXPIRED_AT'
 const STOREAGE_VALUE = '@@STORAGE_VALUE'
+const EXPIRED_MS = '@@EXPIRED_MS'
 
 export class StorageService {
   private storage: Storage
   private prefix: string
   private expiredMs: number
+  private keepAlive: boolean
   private actionNotify: ActionNotifyOptions
 
   public errors: Subject<AngularWebStoreError> = new Subject<
@@ -62,6 +64,7 @@ export class StorageService {
     this.storage.setItem(
       this.computeKey(key),
       JSON.stringify({
+        [EXPIRED_MS]: expiredMs,
         [EXPIRED_AT]: expiredMs === -1 ? -1 : +new Date() + expiredMs,
         [STOREAGE_VALUE]: value
       })
@@ -82,7 +85,11 @@ export class StorageService {
       )
       if (this.isValidValue(obj)) {
         if (this.unExpired(obj[EXPIRED_AT])) {
-          return obj[STOREAGE_VALUE]
+          const value = obj[STOREAGE_VALUE]
+          if (this.keepAlive) {
+            this.set(key, value, String(obj[EXPIRED_MS]) + 'ms')
+          }
+          return value
         } else {
           this.storage.removeItem(this.computeKey(key))
           return null
@@ -117,6 +124,7 @@ export class StorageService {
     this.prefix = config.prefix || 'MIZNE'
     this.expiredMs = config.expiredIn ? ms(config.expiredIn) : -1
     this.actionNotify = config.actionNotify || {}
+    this.keepAlive = config.keepAlive || false
   }
 
   private initStorage(storageType: StorageType): void {

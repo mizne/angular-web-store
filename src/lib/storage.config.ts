@@ -32,6 +32,7 @@ export interface AngularWebStoreConfig {
   prefix?: string
   expiredIn?: string
   actionNotify?: ActionNotifyOptions
+  keepAlive?: boolean
 }
 
 export const ANGULAR_WEB_STORE_CONFIG = new InjectionToken('ANGULAR_WEB_STORE_CONFIG')

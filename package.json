@@ -1,19 +1,22 @@
 {
   "name": "angular-web-store",
-  "version": "0.1.25",
+  "version": "0.2.0",
   "scripts": {
     "build": "gulp build",
     "build:watch": "gulp",
     "docs": "npm run docs:build",
-    "docs:build": "compodoc -p tsconfig.json -n angular-web-store -d docs --hideGenerator",
+    "docs:build":
+      "compodoc -p tsconfig.json -n angular-web-store -d docs --hideGenerator",
     "docs:serve": "npm run docs:build -- -s",
     "docs:watch": "npm run docs:build -- -s -w",
     "lint": "tslint --type-check --project tsconfig.json src/**/*.ts",
     "lite": "lite-server",
     "playground:build": "tsc -p playground -w",
-    "playground": "concurrently \"npm run build:watch\" \"npm run playground:build\" \"npm run lite\"",
+    "playground":
+      "concurrently \"npm run build:watch\" \"npm run playground:build\" \"npm run lite\"",
     "test": "tsc && karma start",
-    "publish": "npm version patch && cd src && npm version patch && cd .. && npm run build && npm publish dist"
+    "publish":
+      "npm version patch && cd src && npm version patch && cd .. && npm run build && npm publish dist"
   },
   "repository": {
     "type": "git",
@@ -23,9 +26,7 @@
     "name": "mizne",
     "email": "w20054319@126.com"
   },
-  "keywords": [
-    "angular"
-  ],
+  "keywords": ["angular"],
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/mizne/angular-web-store/issues"
