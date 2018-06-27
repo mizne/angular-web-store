@@ -1,7 +1,6 @@
 import { Injectable, Inject } from '@angular/core'
 import { ms } from './ms'
-import { Observable } from 'rxjs/Observable'
-import { Subject } from 'rxjs/Subject'
+import { Subject } from 'rxjs'
 
 import {
   ANGULAR_WEB_STORE_CONFIG,

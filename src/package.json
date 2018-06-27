@@ -1,6 +1,6 @@
 {
   "name": "angular-web-store",
-  "version": "0.2.3",
+  "version": "6.0.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/mizne/angular-web-store"
@@ -24,8 +24,8 @@
   "jsnext:main": "angular-web-store.js",
   "typings": "angular-web-store.d.ts",
   "peerDependencies": {
-    "@angular/core": "^4.0.0",
-    "rxjs": "^5.1.0",
+    "@angular/core": "^6.0.0",
+    "rxjs": "^6.0.0",
     "zone.js": "^0.8.4"
   }
 }
